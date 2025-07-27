@@ -15,6 +15,7 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'color-swatches.css' | asset_url | stylesheet_tag }}
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -141,6 +142,32 @@
                     {%- endif -%}
                   </div>
                 {%- endif -%}
+                {%- assign seen_colors = '' -%}
+
+                <div class="color-swatches">
+                  {%- assign seen_colors = '' -%}
+                  {%- for media in product.media -%}
+                    {%- assign color = media.alt | downcase | strip -%}
+                    {%- unless seen_colors contains color -%}
+                      <div class="color-swatch">
+                        <input
+                          id="swatch-{{ color }}"
+                          type="radio"
+                          name="color"
+                          value="{{ color }}"
+                          class="swatch"
+                          data-color="{{ color }}"
+                        >
+                        <label for="swatch-{{ color }}" class="swatch-label">
+                          <span class="swatch-color" style="background-color: {{ color }};"></span>
+                          <span class="swatch-text">{{ color }}</span>
+                        </label>
+                      </div>
+                      {%- assign seen_colors = seen_colors | append: color | append: ',' -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                </div>
+
                 <div {{ block.shopify_attributes }}>
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
                   {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
@@ -2279,9 +2306,9 @@
       "type": "range",
       "id": "slides_per_view_desktop",
       "min": 1,
-      "max": 4,
+      "max": 3,
       "step": 1,
-      "default": 1,
+      "default": 2,
       "label": "Slides per view (Desktop)"
     },
     {
@@ -2290,7 +2317,7 @@
       "min": 1,
       "max": 3,
       "step": 1,
-      "default": 1,
+      "default": 2,
       "label": "Slides per view (Tablet)"
     },
     {

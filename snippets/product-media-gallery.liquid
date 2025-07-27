@@ -18,6 +18,7 @@
 {% endcomment %}
 
 {{ 'component-swiper.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-color-filter.js' | asset_url }}" defer></script>
 
 {%- liquid
   if section.settings.hide_variants and variant_images.size == product.media.size
@@ -91,7 +92,8 @@
             media_width: media_width,
             media_fit: section.settings.media_fit,
             constrain_to_viewport: section.settings.constrain_to_viewport,
-            lazy_load: false
+            lazy_load: false,
+            data_media_alt: featured_media.alt
           %}
         </div>
       {%- endif -%}
@@ -116,7 +118,8 @@
               media_width: media_width,
               media_fit: section.settings.media_fit,
               constrain_to_viewport: section.settings.constrain_to_viewport,
-              lazy_load: true
+              lazy_load: true,
+              data_media_alt: media.alt
             %}
           </div>
         {%- endunless -%}
